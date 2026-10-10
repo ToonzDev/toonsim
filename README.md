@@ -19,15 +19,22 @@ started with `./toonsim.sh`; paths below with `/` instead of `\`. What differs i
   helpers; pull_firmware uses ssh with `tools/askpass.sh`.
 - `python3 tools/make_release.py` on Linux builds `dist/toonsim-<version>-linux-x64.tar.gz`.
 
-    toonsim.bat                     the model of your Toon (firmware\toon-model.txt; else Toon 2)
-    toonsim.bat --size toon2        Toon 2 (1024x600)
-    toonsim.bat --size toon1        Toon 1 (800x480, isNxt false)
-    toonsim.bat --data D:\toon2b    a second simulator, with its own settings
+    toonsim.bat                         the model of your Toon (firmware\toon-model.txt; else Toon 2)
+    toonsim.bat --size toon2            Toon 2 (1024x600)
+    toonsim.bat --size toon1            Toon 1 (800x480, isNxt false)
+    toonsim.bat --freetoon              FreeToon LVGL UI (Toon 2, 1024x600)
+    toonsim.bat --freetoon --size toon1 FreeToon LVGL UI (Toon 1, 800x480)
+    toonsim-freetoon.bat                Direct FreeToon simulator launcher (Windows)
+    ./toonsim-freetoon.sh               Direct FreeToon simulator launcher (Linux/WSL)
+    toonsim.bat --data D:\toon2b        a second simulator, with its own settings
 
 To switch a running simulator between the Toon 1 and Toon 2 screen, use **Ctrl+1** / **Ctrl+2**,
 or on Windows the window menu (the icon at the top left of the window, or Alt+Space), which shows
 the current one with a check mark. It is a restart with the other `--size`, keeping the other
 arguments and the settings in `data\`, just like the GUI restart after a ToonStore install.
+
+To start or test the **FreeToon LVGL UI** alongside the simulator, use **Ctrl+F** or select
+**FreeToon UI (LVGL)...** in the window menu.
 
 To check for updates from GitHub (https://github.com/ToonSoftwareCollective/toonsim), use **Ctrl+U**,
 select **Controleer op updates...** in the window menu, press **Check for updates** in the TSC Settings app,
@@ -46,6 +53,29 @@ refuses to start - give it `--data <other folder>`.
 As on the Toon, the GUI comes back when it quits: TSC's "Restart GUI" (`Qt.quit()`), a reboot request
 and a ToonStore install restart it (the Toon's watchdog / `killall -9 qt-gui`). Closing the window
 ends the simulator.
+
+## FreeToon (LVGL) UI Simulation
+
+In addition to the stock Qt GUI (`qt-gui`), `toonsim` integrates the next-generation **FreeToon LVGL** lightweight UI replacement (`freetoon-lvgl`):
+
+- **Interactive desktop window**: Mouse clicks, screen navigation, live animations (via WSLg on Windows or native X11 on Linux).
+- **Resolution switching**: Toon 2 (`1024x600`) and Toon 1 (`800x480`).
+- **Headless screen exports**: Export full-resolution screenshots of all UI screens for visual regression testing:
+  ```cmd
+  toonsim-freetoon.bat all C:\temp\screens
+  ```
+
+Launch FreeToon simulator via:
+```cmd
+toonsim.bat --freetoon                     rem Windows (Toon 2)
+toonsim.bat --freetoon --size toon1        rem Windows (Toon 1)
+toonsim-freetoon.bat                       rem Dedicated launcher
+```
+Or on Linux / WSL:
+```bash
+./toonsim.sh --freetoon
+./toonsim-freetoon.sh --size toon1
+```
 
 ## Your apps
 

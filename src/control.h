@@ -39,6 +39,8 @@ public:
 	Q_INVOKABLE void restartAs(const QString &size);
 	// check for toonsim updates
 	Q_INVOKABLE void checkUpdates(bool manual = true);
+	// start FreeToon LVGL simulator
+	Q_INVOKABLE void startFreeToon(const QString &size = QString());
 
 private:
 	QByteArray handle(const QString &line);

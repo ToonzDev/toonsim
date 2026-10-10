@@ -140,6 +140,25 @@ void Control::checkUpdates(bool manual)
 	}
 }
 
+void Control::startFreeToon(const QString &size)
+{
+	const QString home = QDir(QCoreApplication::applicationDirPath() + "/..").canonicalPath();
+#ifdef Q_OS_WIN
+	const QString bat = QDir::toNativeSeparators(home + "/toonsim-freetoon.bat");
+	QStringList args;
+	args << "/c" << bat;
+	if (!size.isEmpty()) args << "--size" << size;
+	qInfo("toonsim: starting FreeToon simulator (%s)", qPrintable(size.isEmpty() ? "default" : size));
+	QProcess::startDetached("cmd.exe", args);
+#else
+	const QString sh = home + "/toonsim-freetoon.sh";
+	QStringList args;
+	if (!size.isEmpty()) args << "--size" << size;
+	qInfo("toonsim: starting FreeToon simulator (%s)", qPrintable(size.isEmpty() ? "default" : size));
+	QProcess::startDetached("/bin/sh", QStringList() << sh << args);
+#endif
+}
+
 void Control::mouse(int type, int x, int y)
 {
 	const QPointF p(x, y);

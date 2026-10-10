@@ -77,7 +77,7 @@ def main_linux():
     if not os.path.isfile(exe): sys.exit("no bin/toonsim: run tools/build.sh first")
     tar_path = os.path.join(dist, name + ".tar.gz")
     skip_dirs = {"__pycache__", "build", "build-linux", "out"}
-    executable = lambda rel: rel in ("toonsim.sh", "bin/toonsim") or (rel.startswith("tools/") and rel.endswith(".sh")) \
+    executable = lambda rel: rel in ("toonsim.sh", "toonsim-freetoon.sh", "bin/toonsim") or (rel.startswith("tools/") and rel.endswith(".sh")) \
         or rel.startswith("tools/shims/")
 
     def add(tf, src, rel):
@@ -101,8 +101,9 @@ def main_linux():
                     src = os.path.join(root, f)
                     add(tf, src, os.path.relpath(src, HOME).replace(os.sep, "/"))
                     count += 1
-        for f in ("README.md", "LICENSE", "VERSION", "toonsim.sh"):
-            add(tf, os.path.join(HOME, f), f)
+        for f in ("README.md", "LICENSE", "VERSION", "toonsim.sh", "toonsim-freetoon.sh"):
+            if os.path.exists(os.path.join(HOME, f)):
+                add(tf, os.path.join(HOME, f), f)
         for rel, text in (("apps/PUT-YOUR-APPS-HERE.txt",
                            "Each app in its own folder, as in /qmf/qml/apps on the Toon: apps/<app>/<App>App.qml - see docs/MANUAL.md.\n"),
                           ("firmware/README.txt",
@@ -191,8 +192,9 @@ def main():
     for d in ("sim", "tools", "tests", "docs", "src"):
         if os.path.isdir(os.path.join(HOME, d)):
             copy_tree_filtered(os.path.join(HOME, d), os.path.join(out, d), lambda rel: rel.split(os.sep)[0] in ("out", "build"))
-    for f in ("README.md", "LICENSE", "VERSION", "toonsim.bat"):
-        shutil.copy2(os.path.join(HOME, f), out)
+    for f in ("README.md", "LICENSE", "VERSION", "toonsim.bat", "toonsim-freetoon.bat"):
+        if os.path.exists(os.path.join(HOME, f)):
+            shutil.copy2(os.path.join(HOME, f), out)
     os.makedirs(os.path.join(out, "apps"))
     with open(os.path.join(out, "apps", "PUT-YOUR-APPS-HERE.txt"), "w") as f:
         f.write("Each app in its own folder, as in /qmf/qml/apps on the Toon: apps\\<app>\\<App>App.qml - see docs\\MANUAL.md.\n")

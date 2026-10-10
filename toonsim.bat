@@ -1,6 +1,8 @@
 @echo off
 rem Starts the Toon simulator. All options are passed on, see "toonsim.bat --help":
 rem   --size toon2|toon1     Toon 2 (1024x600, isNxt) or Toon 1 (800x480); default: your Toon's model
+rem   --ui qt|freetoon       UI engine: stock Qt GUI (default) or FreeToon LVGL
+rem   --freetoon             Start FreeToon LVGL simulator
 rem   --apps DIR             custom apps folder, like /qmf/qml/apps (default: toonsim\apps)
 rem   --data DIR             settings and data folder (default: toonsim\data); one simulator per folder
 rem   --web-port N           the Toon's local web server, Toon mobile at http://127.0.0.1:N/mobile/ (8888)
@@ -8,6 +10,18 @@ rem   --control-port N       remote control port (default 5555, 0 = off)
 rem   --hidden               no window (automated tests)
 rem The first start copies the Toon's GUI (and optionally its apps and their settings) from your Toon.
 setlocal
+for %%a in (%*) do (
+	if "%%a"=="--freetoon" (
+		call "%~dp0toonsim-freetoon.bat" %*
+		exit /b %ERRORLEVEL%
+	)
+)
+if "%~1"=="--ui" (
+	if /i "%~2"=="freetoon" (
+		call "%~dp0toonsim-freetoon.bat" %*
+		exit /b %ERRORLEVEL%
+	)
+)
 set PY=%~dp0python\python.exe
 if not exist "%PY%" set PY=python
 if "%~1"=="--check-update" (

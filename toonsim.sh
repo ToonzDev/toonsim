@@ -1,6 +1,8 @@
 #!/bin/sh
 # Starts the Toon simulator on Linux (toonsim.bat on Windows). All options are passed on, see "./toonsim.sh --help":
 #   --size toon2|toon1     Toon 2 (1024x600, isNxt) or Toon 1 (800x480); default: your Toon's model
+#   --ui qt|freetoon       UI engine: stock Qt GUI (default) or FreeToon LVGL
+#   --freetoon             Start FreeToon LVGL simulator
 #   --apps DIR             custom apps folder, like /qmf/qml/apps (default: toonsim/apps)
 #   --data DIR             settings and data folder (default: toonsim/data); one simulator per folder
 #   --web-port N           the Toon's local web server, Toon mobile at http://127.0.0.1:N/mobile/ (8888)
@@ -10,6 +12,15 @@
 # modules, tools/linux-packages.txt - apt, after asking), then copies the Toon's GUI (and optionally its
 # apps and their settings) from your Toon.
 HOME_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+for arg in "$@"; do
+	if [ "$arg" = "--freetoon" ]; then
+		exec "$HOME_DIR/toonsim-freetoon.sh" "$@"
+	fi
+done
+if [ "$1" = "--ui" ] && [ "$2" = "freetoon" ]; then
+	exec "$HOME_DIR/toonsim-freetoon.sh" "$@"
+fi
 
 if [ "$1" = "--check-update" ]; then
 	exec python3 "$HOME_DIR/tools/updater.py" --check

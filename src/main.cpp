@@ -261,6 +261,10 @@ protected:
 			m_control->checkUpdates(true);
 			return true;
 		}
+		if (k->key() == Qt::Key_F && !k->isAutoRepeat()) {
+			m_control->startFreeToon(m_nxt ? "toon2" : "toon1");
+			return true;
+		}
 		if (k->key() != Qt::Key_1 && k->key() != Qt::Key_2) return false;
 		const bool want = k->key() == Qt::Key_2;
 		if (want != m_nxt && !k->isAutoRepeat()) m_control->restartAs(want ? "toon2" : "toon1");
@@ -273,7 +277,7 @@ private:
 
 #ifdef Q_OS_WIN
 // the window menu's extra items (system menu command ids: below 0xF000, low 4 bits zero)
-enum { IDM_TOON1 = 0x1010, IDM_TOON2 = 0x1020, IDM_UPDATE = 0x1030 };
+enum { IDM_TOON1 = 0x1010, IDM_TOON2 = 0x1020, IDM_FREETOON = 0x1030, IDM_UPDATE = 0x1040 };
 
 class SizeMenu : public QAbstractNativeEventFilter
 {
@@ -286,6 +290,8 @@ public:
 		AppendMenuW(menu, MF_STRING | (nxt ? MF_UNCHECKED : MF_CHECKED), IDM_TOON1, L"Toon 1 (800x480)\tCtrl+1");
 		AppendMenuW(menu, MF_STRING | (nxt ? MF_CHECKED : MF_UNCHECKED), IDM_TOON2, L"Toon 2 (1024x600)\tCtrl+2");
 		AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
+		AppendMenuW(menu, MF_STRING, IDM_FREETOON, L"FreeToon UI (LVGL)\tCtrl+F");
+		AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
 		AppendMenuW(menu, MF_STRING, IDM_UPDATE, L"Controleer op updates...\tCtrl+U");
 	}
 	bool nativeEventFilter(const QByteArray &type, void *message, long *) override
@@ -296,6 +302,10 @@ public:
 		const WPARAM id = msg->wParam & 0xFFF0;
 		if (id == IDM_UPDATE) {
 			m_control->checkUpdates(true);
+			return true;
+		}
+		if (id == IDM_FREETOON) {
+			m_control->startFreeToon(m_nxt ? "toon2" : "toon1");
 			return true;
 		}
 		if (id != IDM_TOON1 && id != IDM_TOON2) return false;

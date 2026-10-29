@@ -141,7 +141,8 @@ if "!DO_BUILD!"=="1" (
     )
 )
 
-rem Ensure /mnt/data directory exists in WSL for config and layout saving
+rem Ensure /mnt/data directory exists and kill any stale sim process
+wsl -d Ubuntu bash -c "killall -9 toonui-sim1 toonui-sim 2>/dev/null || true" >nul 2>nul
 wsl -d Ubuntu -u root bash -c "mkdir -p /mnt/data && chmod 777 /mnt/data" >nul 2>nul
 
 echo [toonsim] Starting FreeToon Simulator (%MODEL%, %RES_INFO%)...

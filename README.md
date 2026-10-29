@@ -24,8 +24,10 @@ started with `./toonsim.sh`; paths below with `/` instead of `\`. What differs i
     toonsim.bat --size toon1            Toon 1 (800x480, isNxt false)
     toonsim.bat --freetoon              FreeToon LVGL UI (Toon 2, 1024x600)
     toonsim.bat --freetoon --size toon1 FreeToon LVGL UI (Toon 1, 800x480)
-    toonsim-freetoon.bat                Direct FreeToon simulator launcher (Windows)
+    toonsim-freetoon.bat                Direct FreeToon simulator launcher (Windows, Toon 2)
+    toonsim-toon1.bat                   Direct FreeToon Toon 1 launcher (Windows, 800x480)
     ./toonsim-freetoon.sh               Direct FreeToon simulator launcher (Linux/WSL)
+    ./toonsim-toon1.sh                  Direct FreeToon Toon 1 launcher (Linux/WSL)
     toonsim.bat --data D:\toon2b        a second simulator, with its own settings
 
 To switch a running simulator between the Toon 1 and Toon 2 screen, use **Ctrl+1** / **Ctrl+2**,

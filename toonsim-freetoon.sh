@@ -111,5 +111,15 @@ export DISPLAY="${DISPLAY:-:0}"
 mkdir -p /mnt/data 2>/dev/null && chmod 777 /mnt/data 2>/dev/null || true
 echo "[toonsim] Starting FreeToon Simulator ($MODEL, $RES_INFO)..."
 cd "$FREETOON_DIR/lvgl_ui_recovered/$BUILD_SUBDIR"
-exec "./$BIN_NAME" $FORWARD_ARGS
+
+while true; do
+    "./$BIN_NAME" $FORWARD_ARGS
+    rc=$?
+    if [ $rc -eq 42 ]; then
+        echo ""
+        echo "[toonsim] UI restart requested — restarting simulator..."
+        continue
+    fi
+    exit $rc
+done
 

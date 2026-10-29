@@ -145,9 +145,18 @@ rem Ensure /mnt/data directory exists and kill any stale sim process
 wsl -d Ubuntu bash -c "killall -9 toonui-sim1 toonui-sim 2>/dev/null || true" >nul 2>nul
 wsl -d Ubuntu -u root bash -c "mkdir -p /mnt/data && chmod 777 /mnt/data" >nul 2>nul
 
+:sim_loop
 echo [toonsim] Starting FreeToon Simulator (%MODEL%, %RES_INFO%)...
 wsl -d Ubuntu bash -c "DISPLAY=${DISPLAY:-:0} cd '%WSL_FREETOON_DIR%/lvgl_ui_recovered/%BUILD_SUBDIR%' && ./%BIN_NAME%!FORWARD_ARGS!"
-exit /b %ERRORLEVEL%
+set EXIT_CODE=%ERRORLEVEL%
+
+if "%EXIT_CODE%"=="42" (
+    echo.
+    echo [toonsim] UI restart requested — restarting simulator...
+    goto sim_loop
+)
+
+exit /b %EXIT_CODE%
 
 :show_help
 echo =========================================================================

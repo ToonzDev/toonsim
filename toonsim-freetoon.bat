@@ -156,6 +156,10 @@ if "%EXIT_CODE%"=="42" (
     goto sim_loop
 )
 
+if not "%EXIT_CODE%"=="0" (
+    echo [toonsim] Process exited with code %EXIT_CODE%
+    pause
+)
 exit /b %EXIT_CODE%
 
 :show_help

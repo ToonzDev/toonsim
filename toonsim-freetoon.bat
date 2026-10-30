@@ -141,8 +141,8 @@ if "!DO_BUILD!"=="1" (
     )
 )
 
-rem Ensure /mnt/data directory exists and kill any stale sim process
-wsl -d Ubuntu bash -c "killall -9 toonui-sim1 toonui-sim 2>/dev/null || true" >nul 2>nul
+rem Ensure /mnt/data directory exists and kill any stale sim process or X11 socket locks
+wsl -d Ubuntu bash -c "killall -9 toonui-sim1 toonui-sim 2>/dev/null || true; rm -f /tmp/.X0-lock 2>/dev/null || true; [ -L /tmp/.X11-unix ] || (rm -rf /tmp/.X11-unix && ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix 2>/dev/null || true)" >nul 2>nul
 wsl -d Ubuntu -u root bash -c "mkdir -p /mnt/data && chmod 777 /mnt/data" >nul 2>nul
 
 :sim_loop
